@@ -394,6 +394,29 @@
                 padding: 18px;
             }
         }
+
+
+        .map-container {
+            width: 100%;
+            max-width: 1000px;
+            height: 400px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        @media (max-width: 768px) {
+            .map-container {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .map-container {
+                height: 250px;
+            }
+        }
     </style>
 
 
@@ -444,31 +467,32 @@
     </section>
 
     <section>
-    <h2>Testimonials</h2>
-    <div class="testimonial-slider">
-        <div class="testimonial-track" id="testimonialTrack">
-            <div class="testimonial-box">
-                <p>"Bansal Constructions transformed our home beautifully. Excellent craftsmanship and timely delivery!"</p>
-                <h3>Bathroom</h3>
-            </div>
+        <h2>Testimonials</h2>
+        <div class="testimonial-slider">
+            <div class="testimonial-track" id="testimonialTrack">
+                <div class="testimonial-box">
+                    <p>"Bansal Constructions transformed our home beautifully. Excellent craftsmanship and timely
+                        delivery!"</p>
+                    <h3>Bathroom</h3>
+                </div>
 
-            <div class="testimonial-box">
-                <p>"Professional team, amazing quality. Our office renovation exceeded expectations."</p>
-                <h3>Bedroom</h3>
-            </div>
+                <div class="testimonial-box">
+                    <p>"Professional team, amazing quality. Our office renovation exceeded expectations."</p>
+                    <h3>Bedroom</h3>
+                </div>
 
-            <div class="testimonial-box">
-                <p>"Their manufacturing project setup was seamless. Highly recommend for industrial projects."</p>
-                <h3>Lobby</h3>
-            </div>
+                <div class="testimonial-box">
+                    <p>"Their manufacturing project setup was seamless. Highly recommend for industrial projects."</p>
+                    <h3>Lobby</h3>
+                </div>
 
-            <div class="testimonial-box">
-                <p>"Great team, transparent communication, and delivered on time. Highly satisfied!"</p>
-                <h3>Kitchen</h3>
+                <div class="testimonial-box">
+                    <p>"Great team, transparent communication, and delivered on time. Highly satisfied!"</p>
+                    <h3>Kitchen</h3>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <section>
         <div class="calculator">
@@ -522,6 +546,19 @@
             <div class="result" id="result"></div>
         </div>
     </section>
+
+
+    <section>
+        <h2>Find Our Shop</h2>
+        <div class="map-container">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3443.338265809051!2d76.44416057555917!3d30.341335004443216!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3910292a84b04fe7%3A0xaebb30e4da97eb5c!2sBansal%20Group%20of%20Properties%20and%20Construction!5e0!3m2!1sen!2sin!4v1769011106126!5m2!1sen!2sin"
+                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </section>
+
 
 
     <footer>
