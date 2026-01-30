@@ -400,7 +400,8 @@
             margin-top: 20px;
         }
 
-        .btn-cancel, .btn-confirm {
+        .btn-cancel,
+        .btn-confirm {
             padding: 10px 20px;
             border: none;
             border-radius: 8px;
@@ -645,8 +646,12 @@
     </section>
 
     <footer>
-        © 2024 Bansal Constructions. Trusted Construction Partner.
+        © <span id="year"></span> Bansal Constructions. Trusted Construction Partner.
     </footer>
+
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
 
     <script>
         let currentValue = 0; // stores last animated value
