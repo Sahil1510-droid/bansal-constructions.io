@@ -10,6 +10,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
     <link rel="icon" type="image/png" sizes="16x16" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         /* ======================================
@@ -19,13 +20,18 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Poppins", Arial, sans-serif;
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            background: #f4f6f9;
-            color: #333;
-            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.7;
+            font-weight: 400;
         }
 
         /* ======================================
@@ -105,8 +111,29 @@
             font-weight: 500;
         }
 
+        nav a {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
         nav a:hover {
-            color: #ccc;
+            color: #fff;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #fff;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        nav a:hover::after {
+            width: 100%;
         }
 
         /* ======================================
@@ -435,6 +462,20 @@
             .header-inner {
                 flex-direction: column;
                 text-align: center;
+                gap: 16px;
+            }
+
+            .header-text h1 {
+                font-size: 36px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .services {
+                grid-template-columns: 1fr;
             }
 
             .checkbox-group {
@@ -444,6 +485,10 @@
             .testimonial-box {
                 flex: 0 0 240px;
             }
+
+            .calculator {
+                padding: 30px 20px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -451,9 +496,107 @@
                 font-size: 22px;
             }
 
+            .header-text h1 {
+                font-size: 28px;
+            }
+
             .testimonial-box {
                 flex: 0 0 200px;
             }
+
+            .calculator h3 {
+                font-size: 20px;
+            }
+        }
+
+        /* ======================================
+   ANIMATIONS & MICRO-INTERACTIONS
+====================================== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        section {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        section:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        section:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        /* Loading state for buttons */
+        .btn-loading {
+            position: relative;
+            color: transparent !important;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 50%;
+            left: 50%;
+            margin-left: -8px;
+            margin-top: -8px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ======================================
+   BACK TO TOP BUTTON
+====================================== */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #1e272e;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: #485460;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-to-top svg {
+            width: 20px;
+            height: 20px;
         }
     </style>
 
@@ -650,17 +793,32 @@
     </footer>
 
     <script>
-        document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
+        // Utility function to safely get element
+        const getElement = (id) => {
+            const el = document.getElementById(id);
+            if (!el) {
+                console.warn(`Element with id "${id}" not found`);
+                return null;
+            }
+            return el;
+        };
 
-    <script>
-        let currentValue = 0; // stores last animated value
+        // Set current year
+        const yearEl = getElement("year");
+        if (yearEl) {
+            yearEl.textContent = new Date().getFullYear();
+        }
 
-        function animateValue(start, end, duration) {
-            const resultEl = document.getElementById("result");
+        // Calculator logic with improved error handling
+        let currentValue = 0;
+
+        const animateValue = (start, end, duration = 700) => {
+            const resultEl = getElement("result");
+            if (!resultEl) return;
+
             const startTime = performance.now();
 
-            function update(currentTime) {
+            const update = (currentTime) => {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
 
@@ -670,65 +828,97 @@
                 if (progress < 1) {
                     requestAnimationFrame(update);
                 }
-            }
+            };
 
             requestAnimationFrame(update);
-        }
+        };
 
-        function calculateCost() {
-            const nature = document.getElementById("projectNature").value;
-            const type = document.getElementById("projectType").value;
-            const area = parseFloat(document.getElementById("area").value);
-            const quality = document.getElementById("quality").value;
+        const calculateCost = () => {
+            try {
+                const nature = getElement("projectNature")?.value;
+                const type = getElement("projectType")?.value;
+                const areaInput = getElement("area");
+                const quality = getElement("quality")?.value;
 
-            if (!area || area <= 0) {
-                document.getElementById("result").innerHTML = "Enter area to see estimate";
-                currentValue = 0;
-                return;
+                const area = parseFloat(areaInput?.value || 0);
+
+                if (!area || area <= 0) {
+                    const resultEl = getElement("result");
+                    if (resultEl) resultEl.innerHTML = "Enter area to see estimate";
+                    currentValue = 0;
+                    return;
+                }
+
+                let rate = 0;
+
+                // Base rate calculation
+                if (type === "new") {
+                    rate = nature === "residential" ? 2000 : 2300;
+                } else if (type === "renovation") {
+                    rate = 1500;
+                } else if (type === "manufacturing") {
+                    rate = 1800;
+                }
+
+                // Quality adjustment
+                const qualityAdjustments = {
+                    standard: 300,
+                    premium: 700,
+                    luxury: 1200
+                };
+                rate += qualityAdjustments[quality] || 0;
+
+                let total = rate * area;
+
+                // Add inclusions with modern array methods
+                const inclusions = [
+                    { id: "tiles", multiplier: 150 },
+                    { id: "electrical", multiplier: 90 },
+                    { id: "fans", multiplier: 70 },
+                    { id: "ac", multiplier: 90 },
+                    { id: "ceiling", multiplier: 150 },
+                    { id: "painting", multiplier: 60 },
+                    { id: "plumbing", multiplier: 100 },
+                    { id: "carpentry", multiplier: 120 }
+                ];
+
+                inclusions.forEach(({ id, multiplier }) => {
+                    const checkbox = getElement(id);
+                    if (checkbox?.checked) {
+                        total += area * multiplier;
+                    }
+                });
+
+                animateValue(currentValue, total);
+                currentValue = total;
+            } catch (error) {
+                console.error("Error calculating cost:", error);
+                const resultEl = getElement("result");
+                if (resultEl) resultEl.innerHTML = "Error calculating estimate. Please try again.";
             }
+        };
 
-            let rate = 0;
+        // Event listeners with error handling
+        const elements = ["projectNature", "projectType", "area", "quality"];
+        const checkboxes = document.querySelectorAll("input[type='checkbox']");
 
-            // Base rate
-            if (type === "new") {
-                rate = nature === "residential" ? 2000 : 2300;
+        elements.forEach(id => {
+            const el = getElement(id);
+            if (el) {
+                el.addEventListener("input", calculateCost);
+                el.addEventListener("change", calculateCost);
             }
-
-            if (type === "renovation") rate = 1500;
-            if (type === "manufacturing") rate = 1800;
-
-            // Quality adjustment
-            if (quality === "standard") rate += 300;
-            if (quality === "premium") rate += 700;
-            if (quality === "luxury") rate += 1200;
-
-            let total = rate * area;
-
-            // Add inclusions
-            if (document.getElementById("tiles").checked) total += area * 150;
-            if (document.getElementById("electrical").checked) total += area * 90;
-            if (document.getElementById("fans").checked) total += area * 70;
-            if (document.getElementById("ac").checked) total += area * 90;
-            if (document.getElementById("ceiling").checked) total += area * 150;
-            if (document.getElementById("painting").checked) total += area * 60;
-            if (document.getElementById("plumbing").checked) total += area * 100;
-            if (document.getElementById("carpentry").checked) total += area * 120;
-
-            // Animate number
-            animateValue(currentValue, total, 700);
-            currentValue = total;
-        }
-
-        // LIVE UPDATE
-        document.querySelectorAll(
-            "#projectNature, #projectType, #area, #quality, input[type='checkbox']"
-        ).forEach(el => {
-            el.addEventListener("input", calculateCost);
-            el.addEventListener("change", calculateCost);
         });
 
-        document.getElementById("result").innerHTML = "Enter area to see estimate";
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", calculateCost);
+        });
 
+        // Initialize result display
+        const resultEl = getElement("result");
+        if (resultEl) {
+            resultEl.innerHTML = "Enter area to see estimate";
+        }
     </script>
 
     <script>
@@ -904,7 +1094,27 @@ ${clientName}
         startAuto();
     </script>
 
+    <script>
+        // Back to Top Button Functionality
+        const backToTopBtn = document.getElementById("backToTop");
 
+        // Show/hide button based on scroll position
+        window.addEventListener("scroll", () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add("show");
+            } else {
+                backToTopBtn.classList.remove("show");
+            }
+        });
+
+        // Smooth scroll to top function
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+    </script>
 
     <div class="modal-overlay" id="nameModal">
         <div class="modal-box">
@@ -920,6 +1130,14 @@ ${clientName}
         </div>
     </div>
 
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" onclick="scrollToTop()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 14L12 9L17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
 </body>
 
 </html>
+
